@@ -120,3 +120,8 @@ minicom -D /dev/ttyUSB0
 ```
 
 A special USB-to-Raspberry Pi UART cable is required
+
+
+### Example login screen
+
+![Custom login text](images/login.jpg)
