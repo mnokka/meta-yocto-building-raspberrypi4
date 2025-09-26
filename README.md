@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Build a Yocto image for Raspberry Pi 4 with custom login texts via a separate layer. All modifications are contained in meta-yocto-building-raspberrypi4, keeping official layers untouched.
+Build a Yocto image for Raspberry Pi 4 with custom login texts via a separate layer. All modifications are contained in meta-yocto-building-raspberrypi4, keeping official layers untouched. Image has own login text added.
+Also helloworld is fetched from GitHub repo and added to image ( see meta-yocto-building-raspberrypi4/recipes-example/helloworld/helloworld.bb)
 
 ### Prepare YOCTO directory
 
@@ -35,6 +36,7 @@ YOCTO
 ```
 
 
+
 ### Custom layer structure
 
 ```
@@ -48,6 +50,9 @@ meta-yocto-building-raspberrypi4
         ├── base-files_%.bbappend # bbappend replaces /etc/issue
         └── files/
             └── issue             # own login prompt text
+└── recipes-example/
+    └── helloworld/
+        └── helloworld.bb       # Example program recipe
 ```
 
 
@@ -77,6 +82,19 @@ bitbake core-image-minimal
 
 Build images appear in BUILD-PI4/tmp/deploy/images/raspberrypi4-64
 
+### Enable and rebuild the image
+
+Edit conf/local.conf inside your build directory and add:
+
+
+```bash
+IMAGE_INSTALL:append = " helloworld"
+```
+```bash
+bitbake core-image-minimal
+```
+
+Helloworld can be executed in Pi4 after flashing: helloworld
 
 ### Flashing with BalenEtcher
 
@@ -91,37 +109,18 @@ BUILD-PI4/tmp/deploy/images/raspberrypi4-64/core-image-minimal-raspberrypi4-64.w
 
 ### RS232
 
-Image has RS232 debug texts and possibility to login via RS3232 activated. For debugging Linux can use minicom as a terminal
+Image has RS232 debug texts and possibility to login via RS232 activated. For debugging Linux can use minicom as a terminal
 
 ```bash
 minicom -D /dev/ttyUSB0
 ```
 
 A special USB-to-Raspberry Pi UART cable is required
-/images/raspberrypi4-64/
 
-
-### Flashing with BalenEtcher
-
-
-https://www.balena.io/etcher/
-
-Use image:
-
-BUILD-PI4/tmp/deploy/images/raspberrypi4-64/core-image-minimal-raspberrypi4-64.wic.bz2
-
-
-### RS232
-
-Image has RS232 debug texts and RS232 login activated. For debugging, Linux can use minicom as a terminal
-
-```bash
-minicom -D /dev/ttyUSB0
-```
-
-A special USB-to-Raspberry Pi UART cable is required
 
 
 ### Example login screen
 
 ![Custom login text](images/login.jpg)
+
+
